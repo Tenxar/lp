@@ -1,0 +1,78 @@
+Create teacher database which contains the information of teacherid, name,
+department, salary and status of teacher (Approved/not approved). Design and
+implement any ten queries using mongodb.
+
+
+
+
+Step 1: Create teachers Collection and Insert 10 Records
+
+use schoolDB;
+
+db.teachers.insertMany([
+  { teacherid: 1, name: "John Doe", department: "Mathematics", salary: 50000, status: "Approved" },
+  { teacherid: 2, name: "Jane Smith", department: "Physics", salary: 55000, status: "Approved" },
+  { teacherid: 3, name: "Mark Brown", department: "Chemistry", salary: 45000, status: "Not Approved" },
+  { teacherid: 4, name: "Emily Davis", department: "Biology", salary: 48000, status: "Approved" },
+  { teacherid: 5, name: "Michael Wilson", department: "Mathematics", salary: 60000, status: "Not Approved" },
+  { teacherid: 6, name: "Sarah Miller", department: "English", salary: 40000, status: "Approved" },
+  { teacherid: 7, name: "David Taylor", department: "Physics", salary: 47000, status: "Approved" },
+  { teacherid: 8, name: "Anna Moore", department: "History", salary: 52000, status: "Not Approved" },
+  { teacherid: 9, name: "James Anderson", department: "Chemistry", salary: 53000, status: "Approved" },
+  { teacherid: 10, name: "Laura Thomas", department: "English", salary: 48000, status: "Not Approved" }
+]);
+
+✅ Step 2: Execute 10 Queries on the teachers Collection
+1. Find Teachers in the "Physics" Department
+
+db.teachers.find({ department: "Physics" });
+
+2. Find Teachers with Salary Greater than 50000
+
+db.teachers.find({ salary: { $gt: 50000 } });
+
+3. Find Teachers Who Are "Not Approved"
+
+db.teachers.find({ status: "Not Approved" });
+
+4. Update the Status of Teacher with teacherid 3 to "Approved"
+
+db.teachers.updateOne({ teacherid: 3 }, { $set: { status: "Approved" } });
+
+5. Find Teachers Whose Salary is Less Than 50000 and Sort by Salary in Descending Order
+
+db.teachers.find({ salary: { $lt: 50000 } }).sort({ salary: -1 });
+
+6. Find the Teacher with the Highest Salary
+
+db.teachers.find().sort({ salary: -1 }).limit(1);
+
+7. Find Teachers Who Work in the "Mathematics" Department and Have a Salary Between 50000 and 60000
+
+db.teachers.find({ department: "Mathematics", salary: { $gte: 50000, $lte: 60000 } });
+
+8. Count the Number of Approved Teachers
+
+db.teachers.countDocuments({ status: "Approved" });
+
+9. Find the Teacher with teacherid 5 and Update Their Salary to 65000
+
+db.teachers.updateOne({ teacherid: 5 }, { $set: { salary: 65000 } });
+
+10. Delete Teachers Who Are Not Approved
+
+db.teachers.deleteMany({ status: "Not Approved" });
+
+Summary of Queries Demonstrated:
+
+    Simple Find: Fetching teachers based on department, salary, or status.
+
+    Update Operation: Changing the status or salary of a specific teacher.
+
+    Sorting and Limiting Results: Sorting teachers by salary and limiting results (e.g., highest salary).
+
+    Conditional Queries: Searching with multiple conditions, such as salary and department.
+
+    Aggregation and Count: Counting the number of teachers with a specific status.
+
+    Delete Operation: Removing teachers who are not approved.

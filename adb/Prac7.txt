@@ -1,0 +1,48 @@
+Create library database (using mongodb)
+ List the books of management subjects.
+ List the books whose publication is “Pearson”
+ List the number of journals.
+ List the number of books which price is less than rs.500.
+ Find the total investment for IT dept (IT books).
+
+
+✅ Step 1: Create the books Collection and Insert 10 Records
+
+use libraryDB;
+
+db.books.insertMany([
+  { book_id: 1, title: "Management Principles", subject: "Management", publication: "Pearson", price: 550, type: "book", dept: "Management" },
+  { book_id: 2, title: "IT for Managers", subject: "IT", publication: "Wiley", price: 450, type: "book", dept: "IT" },
+  { book_id: 3, title: "Business Ethics", subject: "Management", publication: "McGraw Hill", price: 400, type: "book", dept: "Management" },
+  { book_id: 4, title: "Java Programming", subject: "IT", publication: "Pearson", price: 700, type: "book", dept: "IT" },
+  { book_id: 5, title: "Marketing Basics", subject: "Management", publication: "Pearson", price: 380, type: "book", dept: "Management" },
+  { book_id: 6, title: "Advanced Databases", subject: "IT", publication: "Springer", price: 800, type: "book", dept: "IT" },
+  { book_id: 7, title: "Journal of AI Research", subject: "AI", publication: "Elsevier", price: 1200, type: "journal", dept: "IT" },
+  { book_id: 8, title: "Accounting Fundamentals", subject: "Finance", publication: "Pearson", price: 500, type: "book", dept: "Finance" },
+  { book_id: 9, title: "Journal of Business", subject: "Management", publication: "McGraw Hill", price: 950, type: "journal", dept: "Management" },
+  { book_id: 10, title: "Network Security", subject: "IT", publication: "Pearson", price: 650, type: "book", dept: "IT" }
+]);
+
+✅ Step 2: Perform the Required Queries
+🔹 1. List the books of Management subjects
+
+db.books.find({ subject: "Management" });
+
+🔹 2. List the books whose publication is “Pearson”
+
+db.books.find({ publication: "Pearson" });
+
+🔹 3. List the number of journals
+
+db.books.countDocuments({ type: "journal" });
+
+🔹 4. List the number of books which price is less than ₹500
+
+db.books.countDocuments({ type: "book", price: { $lt: 500 } });
+
+🔹 5. Find the total investment for IT dept (IT books)
+
+db.books.aggregate([
+  { $match: { dept: "IT", type: "book" } },
+  { $group: { _id: null, total_investment: { $sum: "$price" } } }
+]);

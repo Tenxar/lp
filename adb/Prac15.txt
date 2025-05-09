@@ -1,0 +1,51 @@
+Create Instructor collection and execute following queries
+a. Find out details of instructors working in IT department
+b. Find out details of instructors who have salary>40000
+c. Give count of inst in comp dept
+d. Give incrementof 10000 to instructor whose status is approved
+
+
+Step 1: Create instructors Collection and Insert 10 Records
+
+use universityDB;
+
+db.instructors.insertMany([
+  { instructor_id: 1, name: "John Doe", department: "IT", salary: 50000, status: "Approved" },
+  { instructor_id: 2, name: "Jane Smith", department: "Computer Science", salary: 45000, status: "Approved" },
+  { instructor_id: 3, name: "Mark Brown", department: "Mathematics", salary: 40000, status: "Not Approved" },
+  { instructor_id: 4, name: "Emily Davis", department: "IT", salary: 55000, status: "Approved" },
+  { instructor_id: 5, name: "Michael Wilson", department: "Computer Science", salary: 42000, status: "Not Approved" },
+  { instructor_id: 6, name: "Sarah Miller", department: "IT", salary: 60000, status: "Approved" },
+  { instructor_id: 7, name: "David Taylor", department: "Computer Science", salary: 48000, status: "Not Approved" },
+  { instructor_id: 8, name: "Anna Moore", department: "Physics", salary: 38000, status: "Approved" },
+  { instructor_id: 9, name: "James Anderson", department: "IT", salary: 53000, status: "Approved" },
+  { instructor_id: 10, name: "Laura Thomas", department: "Mathematics", salary: 47000, status: "Not Approved" }
+]);
+
+✅ Step 2: Execute the Queries on the instructors Collection
+1. Find Details of Instructors Working in IT Department
+
+db.instructors.find({ department: "IT" });
+
+2. Find Details of Instructors Whose Salary is Greater Than 40000
+
+db.instructors.find({ salary: { $gt: 40000 } });
+
+3. Give the Count of Instructors in the Computer Science Department
+
+db.instructors.countDocuments({ department: "Computer Science" });
+
+4. Give an Increment of 10000 to Instructors Whose Status is "Approved"
+
+db.instructors.updateMany(
+  { status: "Approved" },
+  { $inc: { salary: 10000 } }
+);
+
+Summary of Queries Demonstrated:
+
+    Find Documents: Using find() to query for instructors in specific departments or with specific salary conditions.
+
+    Count Documents: Using countDocuments() to get the number of instructors in a specific department.
+
+    Update Documents: Using updateMany() to increment the salary of instructors with a specific status.

@@ -1,0 +1,120 @@
+Implement the aggregation and indexing with suitable example in MongoDB.
+Demonstrate the following: Aggregation framework Create and drop different types
+of indexes and explain () to show the advantage of the indexes
+
+
+Step 1: Create books Collection and Insert 10 Records
+
+use bookstoreDB;
+
+db.books.insertMany([
+  { book_id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", price: 500, rating: 4.4, genre: "Fiction" },
+  { book_id: 2, title: "1984", author: "George Orwell", price: 400, rating: 4.8, genre: "Dystopian" },
+  { book_id: 3, title: "Moby Dick", author: "Herman Melville", price: 600, rating: 4.2, genre: "Adventure" },
+  { book_id: 4, title: "To Kill a Mockingbird", author: "Harper Lee", price: 350, rating: 4.6, genre: "Drama" },
+  { book_id: 5, title: "War and Peace", author: "Leo Tolstoy", price: 1200, rating: 4.9, genre: "Historical" },
+  { book_id: 6, title: "The Catcher in the Rye", author: "J.D. Salinger", price: 450, rating: 4.3, genre: "Fiction" },
+  { book_id: 7, title: "The Odyssey", author: "Homer", price: 300, rating: 4.5, genre: "Epic" },
+  { book_id: 8, title: "Pride and Prejudice", author: "Jane Austen", price: 400, rating: 4.7, genre: "Romance" },
+  { book_id: 9, title: "Crime and Punishment", author: "Fyodor Dostoevsky", price: 550, rating: 4.6, genre: "Psychological" },
+  { book_id: 10, title: "The Brothers Karamazov", author: "Fyodor Dostoevsky", price: 700, rating: 4.3, genre: "Philosophical" }
+]);
+
+✅ Step 2: Demonstrate Aggregation Framework
+
+We will use aggregation to compute various statistics or perform complex transformations on our books collection.
+1. Aggregation: Group Books by Genre and Calculate Average Price
+
+db.books.aggregate([
+  {
+    $group: {
+      _id: "$genre",  // Group by genre
+      avgPrice: { $avg: "$price" }  // Calculate average price for each genre
+    }
+  }
+]);
+
+2. Aggregation: Filter Books by Rating > 4.5 and Sort by Price in Descending Order
+
+db.books.aggregate([
+  { $match: { rating: { $gt: 4.5 } } },  // Match books with rating > 4.5
+  { $sort: { price: -1 } }  // Sort by price in descending order
+]);
+
+3. Aggregation: Count Number of Books in Each Genre
+
+db.books.aggregate([
+  {
+    $group: {
+      _id: "$genre",  // Group by genre
+      count: { $sum: 1 }  // Count number of books in each genre
+    }
+  }
+]);
+
+✅ Step 3: Create and Drop Indexes
+Create Indexes
+
+Indexes are used in MongoDB to improve query performance by allowing the database to quickly locate documents based on specific fields.
+1. Create an Index on the author Field
+
+db.books.createIndex({ author: 1 });  // Ascending order index on author
+
+2. Create a Compound Index on author and price Fields
+
+db.books.createIndex({ author: 1, price: -1 });  // Compound index on author and price (price in descending order)
+
+3. Create a Text Index on the title Field
+
+db.books.createIndex({ title: "text" });  // Full-text index on the title field
+
+Drop Indexes
+
+Indexes can be dropped if they are no longer needed.
+4. Drop the Index on author
+
+db.books.dropIndex({ author: 1 });  // Drop index on author field
+
+5. Drop All Indexes
+
+db.books.dropIndexes();  // Drop all indexes in the collection
+
+✅ Step 4: Demonstrate the Advantage of Indexes
+Example: Query Performance without Index
+
+Before creating an index, the query to find books by a specific author might be slow because MongoDB has to scan all documents.
+
+db.books.find({ author: "Fyodor Dostoevsky" });  // Query without index
+
+Example: Query Performance with Index
+
+After creating an index on the author field, the same query becomes much faster.
+
+db.books.find({ author: "Fyodor Dostoevsky" });  // Query with index
+
+To observe the difference in performance, you can use the explain() function. This shows how MongoDB executes a query.
+Query Execution Plan Without Index:
+
+db.books.find({ author: "Fyodor Dostoevsky" }).explain("executionStats");
+
+Query Execution Plan With Index:
+
+db.books.find({ author: "Fyodor Dostoevsky" }).explain("executionStats");
+
+The output will show that the query with the index performs a "COLLSCAN" (collection scan) without an index and "IXSCAN" (index scan) with the index, indicating a faster search using the index.
+Summary of Operations Demonstrated:
+
+    Aggregation Framework:
+
+        Grouping and summarizing data (e.g., average price, book count by genre).
+
+        Filtering and sorting using aggregation pipeline.
+
+    Indexes:
+
+        Creating single-field, compound, and text indexes.
+
+        Dropping indexes when they are no longer needed.
+
+        Using explain() to demonstrate the performance improvement of queries with indexes.
+

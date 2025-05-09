@@ -1,0 +1,80 @@
+Implement aggregation and indexing with suitable example using MongoDB
+
+
+Problem Setup: Sales Records Example
+
+Let’s say we manage a sales database for a store. We'll create a sales collection to store 10 records of products sold.
+
+Each document contains:
+
+    sale_id
+
+    product
+
+    category
+
+    price
+
+    quantity
+
+    sale_date
+
+✅ Step 1: Create the sales Collection and Insert 10 Values
+
+use shopDB;
+
+db.sales.insertMany([
+  { sale_id: 1, product: "Keyboard", category: "Electronics", price: 1200, quantity: 2, sale_date: new Date("2025-05-01") },
+  { sale_id: 2, product: "Mouse", category: "Electronics", price: 600, quantity: 5, sale_date: new Date("2025-05-02") },
+  { sale_id: 3, product: "Monitor", category: "Electronics", price: 8500, quantity: 1, sale_date: new Date("2025-05-02") },
+  { sale_id: 4, product: "Printer", category: "Electronics", price: 7000, quantity: 1, sale_date: new Date("2025-05-03") },
+  { sale_id: 5, product: "Chair", category: "Furniture", price: 3500, quantity: 2, sale_date: new Date("2025-05-03") },
+  { sale_id: 6, product: "Desk", category: "Furniture", price: 9000, quantity: 1, sale_date: new Date("2025-05-04") },
+  { sale_id: 7, product: "Pen Drive", category: "Accessories", price: 500, quantity: 4, sale_date: new Date("2025-05-04") },
+  { sale_id: 8, product: "Notebook", category: "Stationery", price: 100, quantity: 10, sale_date: new Date("2025-05-04") },
+  { sale_id: 9, product: "Headphones", category: "Electronics", price: 3000, quantity: 3, sale_date: new Date("2025-05-05") },
+  { sale_id: 10, product: "USB Cable", category: "Accessories", price: 250, quantity: 6, sale_date: new Date("2025-05-05") }
+]);
+
+✅ Step 2: Aggregation Examples
+🔹 Example 1: Total sales per category
+
+db.sales.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      total_quantity: { $sum: "$quantity" },
+      total_sales: { $sum: { $multiply: ["$price", "$quantity"] } }
+    }
+  }
+]);
+
+This will give you total items sold and revenue per category.
+🔹 Example 2: Daily revenue report
+
+db.sales.aggregate([
+  {
+    $group: {
+      _id: "$sale_date",
+      total_sales: { $sum: { $multiply: ["$price", "$quantity"] } }
+    }
+  },
+  { $sort: { _id: 1 } }
+]);
+
+✅ Step 3: Indexing Example
+🔹 Create Index on category for faster filtering
+
+db.sales.createIndex({ category: 1 });
+
+🔹 Create Compound Index on category and sale_date
+
+db.sales.createIndex({ category: 1, sale_date: -1 });
+
+✅ Step 4: Use Indexed Field in a Query
+
+db.sales.find({ category: "Electronics" }).sort({ sale_date: -1 });
+
+✅ Check Indexes
+
+db.sales.getIndexes();

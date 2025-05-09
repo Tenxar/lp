@@ -1,0 +1,73 @@
+Create a database Execute at least 10 queries on any suitable MongoDB
+database that demonstrates following querying techniques:
+a. find and findOne (specific values)
+b. Query criteria (Query conditionals, OR queries, $not, Conditional
+semantics)
+c. Type-specific queries (Null, Regular expression, Querying arrays)
+
+
+
+
+
+ Step 1: Create books Collection and Insert 10 Records
+
+use libraryDB;
+
+db.books.insertMany([
+  { book_id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", price: 500, genre: "Fiction", tags: ["classic", "american", "novel"] },
+  { book_id: 2, title: "1984", author: "George Orwell", price: 400, genre: "Dystopian", tags: ["classic", "political", "novel"] },
+  { book_id: 3, title: "Moby Dick", author: "Herman Melville", price: 600, genre: "Adventure", tags: ["classic", "whale", "sea"] },
+  { book_id: 4, title: "To Kill a Mockingbird", author: "Harper Lee", price: 350, genre: "Drama", tags: ["classic", "courtroom", "novel"] },
+  { book_id: 5, title: "War and Peace", author: "Leo Tolstoy", price: 1200, genre: "Historical", tags: ["classic", "epic", "war"] },
+  { book_id: 6, title: "The Catcher in the Rye", author: "J.D. Salinger", price: 450, genre: "Fiction", tags: ["classic", "novel"] },
+  { book_id: 7, title: "The Odyssey", author: "Homer", price: 300, genre: "Epic", tags: ["classic", "ancient", "hero"] },
+  { book_id: 8, title: "Pride and Prejudice", author: "Jane Austen", price: 400, genre: "Romance", tags: ["classic", "love", "novel"] },
+  { book_id: 9, title: "Crime and Punishment", author: "Fyodor Dostoevsky", price: 550, genre: "Psychological", tags: ["classic", "crime", "novel"] },
+  { book_id: 10, title: "The Brothers Karamazov", author: "Fyodor Dostoevsky", price: 700, genre: "Philosophical", tags: ["classic", "family", "novel"] }
+]);
+
+✅ Step 2: Execute Queries to Demonstrate Various Querying Techniques
+a. find and findOne (Specific Values)
+🔹 1. Using find to get books with price greater than 500
+
+db.books.find({ price: { $gt: 500 } });
+
+🔹 2. Using findOne to get a book with book_id 3
+
+db.books.findOne({ book_id: 3 });
+
+b. Query Criteria (Query Conditionals, OR Queries, $not, Conditional Semantics)
+🔹 3. Using $or for books that are either in the genre "Fiction" or "Dystopian"
+
+db.books.find({
+  $or: [{ genre: "Fiction" }, { genre: "Dystopian" }]
+});
+
+🔹 4. Using $not to exclude books that are priced below 400
+
+db.books.find({ price: { $not: { $lt: 400 } } });
+
+🔹 5. Using $gte (greater than or equal) to get books with price 500 or more
+
+db.books.find({ price: { $gte: 500 } });
+
+c. Type-Specific Queries (Null, Regular Expression, Querying Arrays)
+🔹 6. Find books with tags array containing the word "novel"
+
+db.books.find({ tags: "novel" });
+
+🔹 7. Find books where tags is an empty array (if any book has an empty tags array)
+
+db.books.find({ tags: [] });
+
+🔹 8. Find books where author is null (none in this case, but demonstrates a null check)
+
+db.books.find({ author: null });
+
+🔹 9. Find books where title matches a regular expression (e.g., books containing "The")
+
+db.books.find({ title: { $regex: "The", $options: "i" } });
+
+🔹 10. Find books where tags array contains both "classic" and "novel"
+
+db.books.find({ tags: { $all: ["classic", "novel"] } });

@@ -1,0 +1,54 @@
+Createdatabase of 'restaurants' collection(Using mongodb)
+ To display the fields restaurant_id, name and cuisine for all the documents
+in the collection restaurant.
+ To find the restaurants that do not prepare any cuisine of 'London' and
+their grade score more than 70
+ to find the restaurant Id, name, and cuisine for those restaurants which
+contain 'esh' as last three letters for its name
+ To display all the documents in the collection restaurants.
+
+
+
+Step 1: Create restaurants Collection and Insert 10 Records
+
+use restaurantDB;
+
+db.restaurants.insertMany([
+  { restaurant_id: 1, name: "Sushi Delight", cuisine: "Japanese", grade_score: 85 },
+  { restaurant_id: 2, name: "Pasta Paradise", cuisine: "Italian", grade_score: 90 },
+  { restaurant_id: 3, name: "Curry House", cuisine: "Indian", grade_score: 78 },
+  { restaurant_id: 4, name: "Burger King", cuisine: "American", grade_score: 72 },
+  { restaurant_id: 5, name: "London Bistro", cuisine: "British", grade_score: 65 },
+  { restaurant_id: 6, name: "Taco Time", cuisine: "Mexican", grade_score: 88 },
+  { restaurant_id: 7, name: "The Royal Feast", cuisine: "French", grade_score: 95 },
+  { restaurant_id: 8, name: "The Great Asian", cuisine: "Chinese", grade_score: 70 },
+  { restaurant_id: 9, name: "Vegan Delights", cuisine: "Vegan", grade_score: 80 },
+  { restaurant_id: 10, name: "Fresh Bites", cuisine: "Fusion", grade_score: 92 }
+]);
+
+✅ Step 2: Execute the Queries on the restaurants Collection
+1. Display the restaurant_id, name, and cuisine for all documents
+
+db.restaurants.find({}, { restaurant_id: 1, name: 1, cuisine: 1, _id: 0 });
+
+2. Find restaurants that do not prepare any cuisine of 'London' and their grade score is more than 70
+
+db.restaurants.find({ cuisine: { $ne: "London" }, grade_score: { $gt: 70 } });
+
+3. Find the restaurant_id, name, and cuisine for those restaurants that contain 'esh' as the last three letters of their name
+
+db.restaurants.find({ name: /esh$/ }, { restaurant_id: 1, name: 1, cuisine: 1, _id: 0 });
+
+4. Display all the documents in the restaurants collection
+
+db.restaurants.find({});
+
+Summary of Queries Demonstrated:
+
+    Projection: Select specific fields (e.g., restaurant_id, name, cuisine) to display.
+
+    Conditional Querying: Find restaurants based on conditions such as cuisine and grade_score.
+
+    Regular Expression: Use a regex query to match restaurants based on the last 3 letters of their name (esh).
+
+    Display All Documents: Retrieve all documents from the collection without any conditions.

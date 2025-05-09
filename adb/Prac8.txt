@@ -1,0 +1,103 @@
+Create a database with suitable example using MongoDB and implement
+a. inserting and saving document (batch insert, insert validation)
+b. Removing document
+c. Updating document (document replacement, using modifiers, upserts,
+updating multiple documents, returning updated documents});
+
+✅ Step 1: Create books Collection and Insert 10 Records
+
+use bookstoreDB;
+
+db.books.insertMany([
+  { book_id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", price: 500, stock: 50 },
+  { book_id: 2, title: "1984", author: "George Orwell", price: 400, stock: 100 },
+  { book_id: 3, title: "Moby Dick", author: "Herman Melville", price: 600, stock: 20 },
+  { book_id: 4, title: "To Kill a Mockingbird", author: "Harper Lee", price: 350, stock: 150 },
+  { book_id: 5, title: "War and Peace", author: "Leo Tolstoy", price: 1200, stock: 10 },
+  { book_id: 6, title: "The Catcher in the Rye", author: "J.D. Salinger", price: 450, stock: 70 },
+  { book_id: 7, title: "The Odyssey", author: "Homer", price: 300, stock: 30 },
+  { book_id: 8, title: "Pride and Prejudice", author: "Jane Austen", price: 400, stock: 120 },
+  { book_id: 9, title: "Crime and Punishment", author: "Fyodor Dostoevsky", price: 550, stock: 40 },
+  { book_id: 10, title: "The Brothers Karamazov", author: "Fyodor Dostoevsky", price: 700, stock: 25 }
+]);
+
+✅ Step 2: Perform Various Operations
+a. Inserting and Saving Documents
+🔹 Batch Insert (Insert many documents)
+
+db.books.insertMany([
+  { book_id: 11, title: "The Hobbit", author: "J.R.R. Tolkien", price: 500, stock: 60 },
+  { book_id: 12, title: "The Lord of the Rings", author: "J.R.R. Tolkien", price: 750, stock: 45 }
+]);
+
+🔹 Insert with Validation (Inserting a single document with validation)
+
+You can enforce validation rules when inserting documents. For example, we can ensure the price field is always a positive number:
+
+db.books.createCollection("books", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["title", "author", "price", "stock"],
+      properties: {
+        title: { bsonType: "string" },
+        author: { bsonType: "string" },
+        price: { bsonType: "int", minimum: 1 },
+        stock: { bsonType: "int", minimum: 0 }
+      }
+    }
+  }
+});
+
+// Insert a valid document
+db.books.insertOne({ book_id: 13, title: "The Alchemist", author: "Paulo Coelho", price: 300, stock: 150 });
+
+// Try inserting an invalid document (price less than 1)
+db.books.insertOne({ book_id: 14, title: "Invalid Book", author: "Unknown", price: -50, stock: 10 });  // This will fail due to validation
+
+b. Removing Documents
+🔹 Remove a Document (Single deletion)
+
+db.books.deleteOne({ book_id: 13 });
+
+🔹 Remove Multiple Documents (Delete all books with stock < 30)
+
+db.books.deleteMany({ stock: { $lt: 30 } });
+
+c. Updating Documents
+🔹 Document Replacement (Replace a document completely)
+
+db.books.replaceOne(
+  { book_id: 1 },  // Find the book with ID 1
+  { book_id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", price: 550, stock: 60 }
+);
+
+🔹 Update Using Modifiers (Increase price by 100 for books in stock > 50)
+
+db.books.updateMany(
+  { stock: { $gt: 50 } },  // Filter books with stock greater than 50
+  { $inc: { price: 100 } }  // Increment their price by 100
+);
+
+🔹 Upsert (Update a document or insert if it doesn't exist)
+
+db.books.updateOne(
+  { book_id: 15 },  // Search for a book with ID 15
+  { $set: { title: "New Book", author: "Author Name", price: 400, stock: 10 } },  // Update data
+  { upsert: true }  // If book with ID 15 doesn't exist, insert a new one
+);
+
+🔹 Update Multiple Documents (Update all books by a certain author)
+
+db.books.updateMany(
+  { author: "Fyodor Dostoevsky" },  // Find all books by this author
+  { $set: { stock: 50 } }  // Set stock to 50 for all matching documents
+);
+
+🔹 Return Updated Documents (Return the updated documents after the update)
+
+db.books.updateOne(
+  { book_id: 2 },  // Find the book with ID 2
+  { $set: { price: 450 } },  // Update price
+  { returnDocument: "after" }  // Return the document after the update
+);

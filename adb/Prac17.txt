@@ -1,0 +1,55 @@
+Create Instructor collection and execute following queries
+a. Find Instructor with id 1,2,3
+b. Find details of instructor except 1,2,3
+c. Find instructor whose salary is neither < 50000 nor department is
+computer
+d. Display details of instructor dept has substring e
+
+Step 1: Create instructors Collection and Insert 10 Records
+
+use universityDB;
+
+db.instructors.insertMany([
+  { instructor_id: 1, first_name: "Saurabh", last_name: "Sharma", department: "IT", salary: 50000, status: "Approved" },
+  { instructor_id: 2, first_name: "John", last_name: "Doe", department: "Computer Science", salary: 45000, status: "Approved" },
+  { instructor_id: 3, first_name: "Saurabh", last_name: "Gupta", department: "Mathematics", salary: 40000, status: "Not Approved" },
+  { instructor_id: 4, first_name: "Emily", last_name: "Davis", department: "IT", salary: 55000, status: "Approved" },
+  { instructor_id: 5, first_name: "Michael", last_name: "Wilson", department: "Computer Science", salary: 42000, status: "Not Approved" },
+  { instructor_id: 6, first_name: "Sarah", last_name: "Miller", department: "IT", salary: 60000, status: "Approved" },
+  { instructor_id: 7, first_name: "David", last_name: "Taylor", department: "Computer Science", salary: 48000, status: "Not Approved" },
+  { instructor_id: 8, first_name: "Anna", last_name: "Moore", department: "Physics", salary: 38000, status: "Approved" },
+  { instructor_id: 9, first_name: "James", last_name: "Anderson", department: "IT", salary: 53000, status: "Approved" },
+  { instructor_id: 10, first_name: "Laura", last_name: "Thomas", department: "Mathematics", salary: 47000, status: "Not Approved" }
+]);
+
+✅ Step 2: Execute the Queries on the instructors Collection
+a. Find Instructors with ID 1, 2, 3
+
+db.instructors.find({ instructor_id: { $in: [1, 2, 3] } });
+
+b. Find Details of Instructors Except for IDs 1, 2, and 3
+
+db.instructors.find({ instructor_id: { $nin: [1, 2, 3] } });
+
+c. Find Instructors Whose Salary is Neither Less Than 50000 Nor Department is Computer Science
+
+db.instructors.find({
+  $and: [
+    { salary: { $gte: 50000 } },
+    { department: { $ne: "Computer Science" } }
+  ]
+});
+
+d. Display Details of Instructors Whose Department Has the Substring "e"
+
+db.instructors.find({ department: /e/ });
+
+Summary of Queries Demonstrated:
+
+    Find Documents by ID: Using $in to find instructors by their IDs.
+
+    Exclude Documents by ID: Using $nin to exclude instructors with specific IDs.
+
+    Complex Query with Conditions: Using $and, $gte, and $ne for more specific conditions like salary and department.
+
+    Substring Search: Using a regular expression (/e/) to find departments with the substring "e".

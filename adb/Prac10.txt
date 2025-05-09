@@ -1,0 +1,94 @@
+Execute at least 10 queries on any suitable MongoDB database that demonstrates
+following: a. $ where queries
+b. Cursors (Limits, skips, sorts, advanced query options)
+c. Database commands
+
+
+Step 1: Create books Collection and Insert 10 Records
+
+use bookstoreDB;
+
+db.books.insertMany([
+  { book_id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", price: 500, rating: 4.4 },
+  { book_id: 2, title: "1984", author: "George Orwell", price: 400, rating: 4.8 },
+  { book_id: 3, title: "Moby Dick", author: "Herman Melville", price: 600, rating: 4.2 },
+  { book_id: 4, title: "To Kill a Mockingbird", author: "Harper Lee", price: 350, rating: 4.6 },
+  { book_id: 5, title: "War and Peace", author: "Leo Tolstoy", price: 1200, rating: 4.9 },
+  { book_id: 6, title: "The Catcher in the Rye", author: "J.D. Salinger", price: 450, rating: 4.3 },
+  { book_id: 7, title: "The Odyssey", author: "Homer", price: 300, rating: 4.5 },
+  { book_id: 8, title: "Pride and Prejudice", author: "Jane Austen", price: 400, rating: 4.7 },
+  { book_id: 9, title: "Crime and Punishment", author: "Fyodor Dostoevsky", price: 550, rating: 4.6 },
+  { book_id: 10, title: "The Brothers Karamazov", author: "Fyodor Dostoevsky", price: 700, rating: 4.3 }
+]);
+
+✅ Step 2: Execute 10 Queries Demonstrating Required Features
+a. $where Queries
+🔹 1. Use $where to find books with a price greater than 500 and a rating greater than 4.5
+
+db.books.find({
+  $where: function() {
+    return this.price > 500 && this.rating > 4.5;
+  }
+});
+
+🔹 2. Use $where to find books where the title length is greater than 15 characters
+
+db.books.find({
+  $where: function() {
+    return this.title.length > 15;
+  }
+});
+
+b. Cursors (Limits, Skips, Sorts, Advanced Query Options)
+🔹 3. Limit results to 5 books
+
+db.books.find().limit(5);
+
+🔹 4. Skip the first 3 books and return the next 3
+
+db.books.find().skip(3).limit(3);
+
+🔹 5. Sort books by price in ascending order
+
+db.books.find().sort({ price: 1 });
+
+🔹 6. Sort books by rating in descending order
+
+db.books.find().sort({ rating: -1 });
+
+🔹 7. Sort by price ascending and then by rating descending
+
+db.books.find().sort({ price: 1, rating: -1 });
+
+🔹 8. Find books with a price between 400 and 600 and limit the result to 3
+
+db.books.find({ price: { $gte: 400, $lte: 600 } }).limit(3);
+
+c. Database Commands
+🔹 9. Count the total number of books in the collection
+
+db.books.countDocuments();
+
+🔹 10. Drop the books collection
+
+db.books.drop();
+
+Summary of Queries Demonstrated:
+
+    $where queries: Used to perform more complex JavaScript-based conditions in MongoDB queries.
+
+    Cursors:
+
+        limit: Restrict the number of documents returned.
+
+        skip: Skip a number of documents, useful for pagination.
+
+        sort: Order the documents in ascending or descending order.
+
+        Advanced query options like combining skip, limit, and sort.
+
+    Database Commands:
+
+        countDocuments: Count the number of documents in a collection.
+
+        drop: Drop a collection from the database.

@@ -1,0 +1,58 @@
+Create Instructor collection and execute following queries
+a. Display details of instructor whose City has substring n
+b. Find details of instructor whose Dept has substring mec and h
+c. Find out instructor id, first name, department name along with salary
+where salary< 50000 and status is approved
+d. Find out details of instructors who have salary<30000
+
+ Step 1: Create instructors Collection and Insert 10 Records
+
+use universityDB;
+
+db.instructors.insertMany([
+  { instructor_id: 1, first_name: "Saurabh", last_name: "Sharma", department: "Mechanical Engineering", salary: 50000, status: "Approved" },
+  { instructor_id: 2, first_name: "John", last_name: "Doe", department: "Computer Science", salary: 45000, status: "Approved" },
+  { instructor_id: 3, first_name: "Saurabh", last_name: "Gupta", department: "Mathematics", salary: 40000, status: "Not Approved" },
+  { instructor_id: 4, first_name: "Emily", last_name: "Davis", department: "Mechanical Engineering", salary: 55000, status: "Approved" },
+  { instructor_id: 5, first_name: "Michael", last_name: "Wilson", department: "Computer Science", salary: 42000, status: "Not Approved" },
+  { instructor_id: 6, first_name: "Sarah", last_name: "Miller", department: "Information Technology", salary: 60000, status: "Approved" },
+  { instructor_id: 7, first_name: "David", last_name: "Taylor", department: "Computer Science", salary: 48000, status: "Not Approved" },
+  { instructor_id: 8, first_name: "Anna", last_name: "Moore", department: "Physics", salary: 38000, status: "Approved" },
+  { instructor_id: 9, first_name: "James", last_name: "Anderson", department: "Mechanical Engineering", salary: 53000, status: "Approved" },
+  { instructor_id: 10, first_name: "Laura", last_name: "Thomas", department: "Mathematics", salary: 47000, status: "Not Approved" }
+]);
+
+✅ Step 2: Execute the Queries on the instructors Collection
+a. Delete Details of Instructors Having Salary < 30000
+
+db.instructors.deleteMany({ salary: { $lt: 30000 } });
+
+b. Find Instructors with Either Salary < 50000 or Department is Computer Science
+
+db.instructors.find({
+  $or: [
+    { salary: { $lt: 50000 } },
+    { department: "Computer Science" }
+  ]
+});
+
+c. Find Details of Instructors Who Have Salary == 50000
+
+db.instructors.find({ salary: 50000 });
+
+d. Find Employee ID, First Name, Along with Salary Where Salary > 50000
+
+db.instructors.find(
+  { salary: { $gt: 50000 } },
+  { instructor_id: 1, first_name: 1, salary: 1 }
+);
+
+Summary of Queries Demonstrated:
+
+    Delete Records: Using deleteMany() to delete instructors with a salary less than 30,000.
+
+    Logical OR Queries: Using $or to find instructors with a salary less than 50,000 or in the "Computer Science" department.
+
+    Exact Match Query: Using find() to retrieve instructors with an exact salary of 50,000.
+
+    Field Selection with Query Conditions: Using find() with projection (instructor_id, first_name, salary) to display specific fields where salary is greater than 50,000.

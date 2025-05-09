@@ -1,0 +1,54 @@
+Create Instructor collection and execute following queries
+a. Display the documents in ascending order
+b. Display the details of instructor whose first name is Saurabh
+c. Display first 5 documents of instructor collection
+d. Add one more phone to id 1 (AddtoSet )
+
+
+
+Step 1: Create instructors Collection and Insert 10 Records
+
+use universityDB;
+
+db.instructors.insertMany([
+  { instructor_id: 1, first_name: "Saurabh", last_name: "Sharma", department: "IT", salary: 50000, status: "Approved", phone_numbers: ["9876543210", "1234567890"] },
+  { instructor_id: 2, first_name: "John", last_name: "Doe", department: "Computer Science", salary: 45000, status: "Approved", phone_numbers: ["9876543220"] },
+  { instructor_id: 3, first_name: "Saurabh", last_name: "Gupta", department: "Mathematics", salary: 40000, status: "Not Approved", phone_numbers: ["9876543230"] },
+  { instructor_id: 4, first_name: "Emily", last_name: "Davis", department: "IT", salary: 55000, status: "Approved", phone_numbers: ["9876543240"] },
+  { instructor_id: 5, first_name: "Michael", last_name: "Wilson", department: "Computer Science", salary: 42000, status: "Not Approved", phone_numbers: ["9876543250"] },
+  { instructor_id: 6, first_name: "Sarah", last_name: "Miller", department: "IT", salary: 60000, status: "Approved", phone_numbers: ["9876543260"] },
+  { instructor_id: 7, first_name: "David", last_name: "Taylor", department: "Computer Science", salary: 48000, status: "Not Approved", phone_numbers: ["9876543270"] },
+  { instructor_id: 8, first_name: "Anna", last_name: "Moore", department: "Physics", salary: 38000, status: "Approved", phone_numbers: ["9876543280"] },
+  { instructor_id: 9, first_name: "James", last_name: "Anderson", department: "IT", salary: 53000, status: "Approved", phone_numbers: ["9876543290"] },
+  { instructor_id: 10, first_name: "Laura", last_name: "Thomas", department: "Mathematics", salary: 47000, status: "Not Approved", phone_numbers: ["9876543300"] }
+]);
+
+✅ Step 2: Execute the Queries on the instructors Collection
+a. Display the Documents in Ascending Order of instructor_id
+
+db.instructors.find({}).sort({ instructor_id: 1 });
+
+b. Display the Details of Instructor Whose First Name is "Saurabh"
+
+db.instructors.find({ first_name: "Saurabh" });
+
+c. Display the First 5 Documents of the Instructor Collection
+
+db.instructors.find({}).limit(5);
+
+d. Add One More Phone Number to Instructor with instructor_id 1 (Using $addToSet)
+
+db.instructors.updateOne(
+  { instructor_id: 1 },
+  { $addToSet: { phone_numbers: "9876543320" } }
+);
+
+Summary of Queries Demonstrated:
+
+    Sorting: Using sort() to display documents in ascending order by instructor_id.
+
+    Find: Using find() to retrieve documents based on specific criteria (e.g., first name).
+
+    Limiting Results: Using limit() to display only the first 5 documents from the collection.
+
+    Updating: Using $addToSet to add a new phone number to an instructor's record, ensuring no duplicates.

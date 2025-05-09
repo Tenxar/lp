@@ -1,0 +1,55 @@
+Implement map reduce operation for super market.
+
+
+
+Step 1: Create the sales Collection and Insert 10 Records
+
+use supermarketDB;
+
+db.sales.insertMany([
+  { bill_id: 101, product: "Milk", quantity: 2, price: 30 },
+  { bill_id: 102, product: "Bread", quantity: 1, price: 25 },
+  { bill_id: 103, product: "Eggs", quantity: 12, price: 5 },
+  { bill_id: 104, product: "Milk", quantity: 1, price: 30 },
+  { bill_id: 105, product: "Butter", quantity: 1, price: 50 },
+  { bill_id: 106, product: "Eggs", quantity: 6, price: 5 },
+  { bill_id: 107, product: "Juice", quantity: 2, price: 40 },
+  { bill_id: 108, product: "Milk", quantity: 3, price: 30 },
+  { bill_id: 109, product: "Bread", quantity: 2, price: 25 },
+  { bill_id: 110, product: "Butter", quantity: 2, price: 50 }
+]);
+
+✅ Step 2: MapReduce — Total Revenue per Product
+🔹 Define the map function
+
+var mapFunction = function() {
+  emit(this.product, this.quantity * this.price);
+};
+
+🔹 Define the reduce function
+
+var reduceFunction = function(keyProduct, valuesRevenue) {
+  return Array.sum(valuesRevenue);
+};
+
+🔹 Run MapReduce
+
+db.sales.mapReduce(
+  mapFunction,
+  reduceFunction,
+  {
+    out: "product_revenue"
+  }
+);
+
+✅ Step 3: View the Result
+
+db.product_revenue.find().pretty();
+
+✅ Sample Output (in product_revenue collection)
+
+{ "_id" : "Bread", "value" : 75 }
+{ "_id" : "Butter", "value" : 150 }
+{ "_id" : "Eggs", "value" : 90 }
+{ "_id" : "Juice", "value" : 80 }
+{ "_id" : "Milk", "value" : 180 }

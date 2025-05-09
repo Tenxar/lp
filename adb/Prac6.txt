@@ -1,0 +1,53 @@
+Create university database (using mongodb)
+ Find the list of teachers in IT dept.
+ Find the list of teachers who have salary greater than 50000.
+ Find the teacher’s list in descending order.
+ Remove the teacher whose status is not approved.
+ Give the increment of rs.20000 who has salary less than 30000
+
+
+Step 1: Create teachers Collection and Insert 10 Sample Records
+
+use universityDB;
+
+db.teachers.insertMany([
+  { emp_id: 1, name: "Dr. Asha", dept: "IT", salary: 48000, status: "approved" },
+  { emp_id: 2, name: "Mr. Ravi", dept: "IT", salary: 52000, status: "approved" },
+  { emp_id: 3, name: "Ms. Neha", dept: "CSE", salary: 29000, status: "approved" },
+  { emp_id: 4, name: "Mr. Aman", dept: "IT", salary: 61000, status: "approved" },
+  { emp_id: 5, name: "Dr. Rekha", dept: "ECE", salary: 57000, status: "not approved" },
+  { emp_id: 6, name: "Mr. Suresh", dept: "MECH", salary: 27000, status: "approved" },
+  { emp_id: 7, name: "Ms. Pooja", dept: "IT", salary: 26000, status: "approved" },
+  { emp_id: 8, name: "Dr. Kumar", dept: "CSE", salary: 45000, status: "approved" },
+  { emp_id: 9, name: "Mr. Akash", dept: "IT", salary: 30000, status: "not approved" },
+  { emp_id: 10, name: "Dr. Rani", dept: "ECE", salary: 31000, status: "approved" }
+]);
+
+✅ Step 2: Perform Required Operations
+🔹 1. Find the list of teachers in IT dept.
+
+db.teachers.find({ dept: "IT" });
+
+🔹 2. Find the list of teachers with salary > 50000
+
+db.teachers.find({ salary: { $gt: 50000 } });
+
+🔹 3. Find the teacher’s list in descending order (by name or salary)
+🔸 By name:
+
+db.teachers.find().sort({ name: -1 });
+
+🔸 By salary:
+
+db.teachers.find().sort({ salary: -1 });
+
+🔹 4. Remove the teacher whose status is not approved
+
+db.teachers.deleteMany({ status: { $ne: "approved" } });
+
+🔹 5. Give increment of ₹20,000 to teachers with salary < 30,000
+
+db.teachers.updateMany(
+  { salary: { $lt: 30000 } },
+  { $inc: { salary: 20000 } }
+);

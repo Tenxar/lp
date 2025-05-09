@@ -1,0 +1,53 @@
+Create Instructor collection and execute following queries
+a. Find out details of instructors having salary >40000 and < 80000
+b. Display the details of instructors who are living in Maharashtra
+c. Find out details of instructors working in AIML department
+d. Find instructor id along with department and salary where department
+has substring o.
+
+Step 1: Create instructors Collection and Insert 10 Records
+
+use universityDB;
+
+db.instructors.insertMany([
+  { instructor_id: 1, first_name: "Saurabh", last_name: "Sharma", department: "Mechanical Engineering", salary: 50000, status: "Approved", city: "Mumbai" },
+  { instructor_id: 2, first_name: "John", last_name: "Doe", department: "Computer Science", salary: 45000, status: "Approved", city: "Delhi" },
+  { instructor_id: 3, first_name: "Saurabh", last_name: "Gupta", department: "Mathematics", salary: 40000, status: "Not Approved", city: "Pune" },
+  { instructor_id: 4, first_name: "Emily", last_name: "Davis", department: "Mechanical Engineering", salary: 75000, status: "Approved", city: "Bangalore" },
+  { instructor_id: 5, first_name: "Michael", last_name: "Wilson", department: "Computer Science", salary: 42000, status: "Not Approved", city: "Maharashtra" },
+  { instructor_id: 6, first_name: "Sarah", last_name: "Miller", department: "Information Technology", salary: 60000, status: "Approved", city: "Mumbai" },
+  { instructor_id: 7, first_name: "David", last_name: "Taylor", department: "AIML", salary: 65000, status: "Not Approved", city: "Maharashtra" },
+  { instructor_id: 8, first_name: "Anna", last_name: "Moore", department: "Physics", salary: 38000, status: "Approved", city: "Hyderabad" },
+  { instructor_id: 9, first_name: "James", last_name: "Anderson", department: "AIML", salary: 70000, status: "Approved", city: "Pune" },
+  { instructor_id: 10, first_name: "Laura", last_name: "Thomas", department: "Mathematics", salary: 47000, status: "Not Approved", city: "Maharashtra" }
+]);
+
+✅ Step 2: Execute the Queries on the instructors Collection
+a. Find Out Details of Instructors Having Salary > 40000 and < 80000
+
+db.instructors.find({ salary: { $gt: 40000, $lt: 80000 } });
+
+b. Display the Details of Instructors Who Are Living in Maharashtra
+
+db.instructors.find({ city: "Maharashtra" });
+
+c. Find Out Details of Instructors Working in the AIML Department
+
+db.instructors.find({ department: "AIML" });
+
+d. Find Instructor ID Along with Department and Salary Where Department Has the Substring "o"
+
+db.instructors.find(
+  { department: /o/ },
+  { instructor_id: 1, department: 1, salary: 1 }
+);
+
+Summary of Queries Demonstrated:
+
+    Salary Range Query: Using $gt and $lt to find instructors with salaries between 40,000 and 80,000.
+
+    City Filter: Using find() to retrieve instructors located in "Maharashtra".
+
+    Specific Department Query: Filtering instructors who work in the "AIML" department.
+
+    Substring Search in Department: Using a regular expression (/o/) to find departments with the substring "o".

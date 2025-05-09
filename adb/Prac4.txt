@@ -1,0 +1,74 @@
+For student database execute following queries:
+- Find the record of the students who has got the highest marks in DBMS
+subject.
+- Find the average result of TOC subject.
+- Find the record of the students who has got the lowest marks in CNT subject.
+- Find the total number of students who scored first class
+
+Step 1: Create the students Collection and Insert 10 Records
+
+Each student record includes:
+
+    roll_no
+
+    name
+
+    dbms (marks)
+
+    toc (marks)
+
+    cnt (marks)
+
+We'll assume First Class means total average ≥ 60%.
+
+use collegeDB;
+
+db.students.insertMany([
+  { roll_no: 1, name: "Amit", dbms: 78, toc: 67, cnt: 72 },
+  { roll_no: 2, name: "Priya", dbms: 88, toc: 75, cnt: 80 },
+  { roll_no: 3, name: "Rahul", dbms: 92, toc: 82, cnt: 85 },
+  { roll_no: 4, name: "Sneha", dbms: 65, toc: 59, cnt: 60 },
+  { roll_no: 5, name: "Karan", dbms: 50, toc: 45, cnt: 52 },
+  { roll_no: 6, name: "Ritu", dbms: 95, toc: 90, cnt: 93 },
+  { roll_no: 7, name: "Vikram", dbms: 48, toc: 51, cnt: 40 },
+  { roll_no: 8, name: "Neha", dbms: 86, toc: 79, cnt: 88 },
+  { roll_no: 9, name: "Manoj", dbms: 77, toc: 70, cnt: 75 },
+  { roll_no: 10, name: "Alok", dbms: 66, toc: 58, cnt: 61 }
+]);
+
+✅ Step 2: Execute the Queries
+🔹 1. Find the student with the highest marks in DBMS
+
+db.students.find().sort({ dbms: -1 }).limit(1);
+
+🔹 2. Find the average result of TOC
+
+db.students.aggregate([
+  {
+    $group: {
+      _id: null,
+      avg_toc: { $avg: "$toc" }
+    }
+  }
+]);
+
+🔹 3. Find the student with the lowest marks in CNT
+
+db.students.find().sort({ cnt: 1 }).limit(1);
+
+🔹 4. Find total number of students who scored First Class (average ≥ 60)
+
+db.students.aggregate([
+  {
+    $addFields: {
+      average: { $avg: ["$dbms", "$toc", "$cnt"] }
+    }
+  },
+  {
+    $match: { average: { $gte: 60 } }
+  },
+  {
+    $count: "first_class_students"
+  }
+]);
+

@@ -1,0 +1,62 @@
+Create table Tutorial(tutorial_id,tut_title,author,submission_date) using
+MongoDB
+Implement following operation on above table
+1)Insert
+2)Update
+3)Delete
+4)Display all the tutorial details
+5)Find specific tutorial_id and author of respective tutorial.
+6)Display all the records of tutorial where author name starts with”Sa”
+7)Display all tutorials in Ascending and Descending order according to
+tutorial_id or author nam
+
+
+use tutorialDB;
+
+db.Tutorial.insertMany([
+  { tutorial_id: 1, tut_title: "Intro to MongoDB", author: "Sam", submission_date: new Date("2024-01-15") },
+  { tutorial_id: 2, tut_title: "Advanced MongoDB", author: "Sara", submission_date: new Date("2024-01-20") },
+  { tutorial_id: 3, tut_title: "NodeJS Basics", author: "Sandeep", submission_date: new Date("2024-02-01") },
+  { tutorial_id: 4, tut_title: "React Hooks", author: "Arjun", submission_date: new Date("2024-03-05") },
+  { tutorial_id: 5, tut_title: "Express.js Guide", author: "Sanya", submission_date: new Date("2024-04-12") },
+  { tutorial_id: 6, tut_title: "Vue.js Crash Course", author: "Manoj", submission_date: new Date("2024-04-20") },
+  { tutorial_id: 7, tut_title: "REST APIs", author: "Sakshi", submission_date: new Date("2024-05-02") },
+  { tutorial_id: 8, tut_title: "MERN Stack", author: "Ravi", submission_date: new Date("2024-05-06") },
+  { tutorial_id: 9, tut_title: "MongoDB Aggregation", author: "Saurav", submission_date: new Date("2024-05-07") },
+  { tutorial_id: 10, tut_title: "GraphQL Intro", author: "Sahil", submission_date: new Date("2024-05-08") }
+]);
+
+
+db.Tutorial.updateOne(
+  { tutorial_id: 3 },
+  { $set: { tut_title: "NodeJS and MongoDB Integration" } }
+);
+
+
+db.Tutorial.deleteOne({ tutorial_id: 6 });
+
+
+db.Tutorial.find().pretty();
+
+
+db.Tutorial.find(
+  { tutorial_id: 5 },
+  { _id: 0, tutorial_id: 1, author: 1 }
+);
+
+
+db.Tutorial.find(
+  { author: /^Sa/ }
+);
+
+
+db.Tutorial.find().sort({ tutorial_id: 1 });
+
+
+db.Tutorial.find().sort({ tutorial_id: -1 });
+
+
+db.Tutorial.find().sort({ author: 1 });
+
+
+db.Tutorial.find().sort({ author: -1 });

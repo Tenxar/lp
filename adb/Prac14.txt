@@ -1,0 +1,69 @@
+Create author database(Using Mongodb)-Using author_id, title, name,
+description, url,likes.
+ To display a list stating how many tutorials are written by each user
+ To display author names where the author field equals “Kahate”
+ To display all author names in ascending & descending order
+ To calculate maximum& minimum value of book title
+
+
+
+Step 1: Create authors Collection and Insert 10 Records
+
+use authorDB;
+
+db.authors.insertMany([
+  { author_id: 1, title: "MongoDB Basics", name: "Kahate", description: "Introduction to MongoDB", url: "http://example.com/mongodb-basics", likes: 120 },
+  { author_id: 2, title: "Advanced MongoDB", name: "Kahate", description: "Advanced concepts in MongoDB", url: "http://example.com/advanced-mongodb", likes: 200 },
+  { author_id: 3, title: "Learning Python", name: "Smith", description: "Python for beginners", url: "http://example.com/learning-python", likes: 150 },
+  { author_id: 4, title: "Data Science 101", name: "Williams", description: "Introduction to Data Science", url: "http://example.com/data-science-101", likes: 180 },
+  { author_id: 5, title: "Intro to Algorithms", name: "Kahate", description: "Basic algorithms and data structures", url: "http://example.com/intro-to-algorithms", likes: 130 },
+  { author_id: 6, title: "Machine Learning Basics", name: "Johnson", description: "Machine learning concepts", url: "http://example.com/machine-learning-basics", likes: 160 },
+  { author_id: 7, title: "The Data Science Journey", name: "Williams", description: "Journey through the world of data science", url: "http://example.com/data-science-journey", likes: 140 },
+  { author_id: 8, title: "Deep Learning", name: "Davis", description: "Introduction to Deep Learning", url: "http://example.com/deep-learning", likes: 210 },
+  { author_id: 9, title: "Web Development", name: "Kahate", description: "Web development from scratch", url: "http://example.com/web-development", likes: 250 },
+  { author_id: 10, title: "Data Analysis with Python", name: "Miller", description: "Data analysis using Python libraries", url: "http://example.com/data-analysis-python", likes: 175 }
+]);
+
+✅ Step 2: Execute the Queries on the authors Collection
+1. Display the list stating how many tutorials are written by each user
+
+db.authors.aggregate([
+  { $group: { _id: "$name", count: { $sum: 1 } } }  // Group by name and count the number of tutorials
+]);
+
+2. Display author names where the author field equals "Kahate"
+
+db.authors.find({ name: "Kahate" }, { name: 1, _id: 0 });
+
+3. Display all author names in ascending & descending order
+Ascending Order:
+
+db.authors.find({}, { name: 1, _id: 0 }).sort({ name: 1 });
+
+Descending Order:
+
+db.authors.find({}, { name: 1, _id: 0 }).sort({ name: -1 });
+
+4. Calculate maximum and minimum value of likes for the books
+Maximum Likes:
+
+db.authors.aggregate([
+  { $group: { _id: null, maxLikes: { $max: "$likes" } } }
+]);
+
+Minimum Likes:
+
+db.authors.aggregate([
+  { $group: { _id: null, minLikes: { $min: "$likes" } } }
+]);
+
+Summary of Queries Demonstrated:
+
+    Aggregation: Grouping by author name and counting the number of tutorials written.
+
+    Find: Finding documents based on specific criteria such as author name.
+
+    Sorting: Sorting authors' names in ascending and descending order.
+
+    Aggregation for Calculating Max/Min: Finding the maximum and minimum likes for the tutorials.
+
